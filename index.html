@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love ♥</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --tertiary-black: #2a2a2a;
+            --primary-white: #ffffff;
+            --secondary-white: #f5f5f5;
+            --tertiary-white: #e0e0e0;
+            --accent-grey: #666666;
+            --light-grey: #999999;
+            --border-grey: #333333;
+            --shadow-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.8);
+            --gradient-primary: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%);
+            --gradient-accent: linear-gradient(45deg, #ffffff 0%, #cccccc 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-primary);
+            color: var(--secondary-white);
+            min-height: 100vh;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        /* Pre-Envelope Special Photos Screen */
+        .special-photos-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            z-index: 15000;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+            overflow: hidden;
+        }
+
+        .special-photos-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .special-photo-container {
+            position: absolute;
+            opacity: 0;
+            transition: all 1s ease;
+        }
+
+        .special-photo-container.show {
+            opacity: 1;
+        }
+
+        /* First photo - top, horizontal layout */
+        .special-photo-1 {
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 40%;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        /* Second photo - bottom, horizontal layout */
+        .special-photo-2 {
+            bottom: 5%;
+            left: 5%;
+            width: 90%;
+            height: 40%;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-direction: row-reverse;
+        }
+
+        .special-photo {
+            flex: 1.2;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 2px solid rgba(255,255,255,0.1);
+            min-height: 250px;
+        }
+
+        .special-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 60%;
+            transition: transform 0.3s ease;
+        }
+
+        /* Make second photo show even lower */
+        .special-photo-2 .special-photo img {
+            object-position: center 80%;
+        }
+
+        .special-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .special-message {
+            flex: 0.8;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .special-message-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-white);
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            line-height: 1.4;
+        }
+
+            text-align: center;
+            animation: messageGlow 3s infinite ease-in-out;
+        }
+
+        .bisaya-text {
+            color: #f0f0f0;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .english-text {
+            color: #d0d0d0;
+            font-size: 1.8rem;
+            font-style: italic;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Envelope Screen */
+        .envelope-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #0a0a0a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+
+        .envelope-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .envelope-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            width: 450px;
+            height: 300px;
+            background: linear-gradient(145deg, #1a1a1a 0%, #000000 50%, #2a2a2a 100%);
+            position: relative;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.8),
+                inset 0 2px 4px rgba(255,255,255,0.1),
+                inset 0 -2px 4px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            animation: envelopePulse 2s infinite ease-in-out;
+            border: 2px solid #333;
+            transform-style: preserve-3d;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            border-top: 150px solid #0a0a0a;
+            z-index: 2;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            border-top: 150px solid #1a1a1a;
+            z-index: 3;
+            transition: transform 1.2s ease;
+            transform-origin: bottom center;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
+        }
+
+        .envelope.opening .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        /* Ribbon decoration */
+        .envelope-ribbon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 8px;
+            background: linear-gradient(90deg, #444 0%, #666 50%, #444 100%);
+            border-radius: 4px;
+            z-index: 4;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .envelope-ribbon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 15px solid #444;
+        }
+
+        .envelope-ribbon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 15px solid #444;
+        }
+
+        /* Wax seal effect */
+        .envelope-seal {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #8B0000 0%, #660000 70%, #440000 100%);
+            border-radius: 50%;
+            z-index: 4;
+            box-shadow: 
+                0 6px 12px rgba(0,0,0,0.6),
+                inset 0 2px 4px rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FFD700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: var(--primary-white);
+            z-index: 4;
+            animation: heartFloat 2s infinite ease-in-out;
+        }
+
+        /* Floating Memories World */
+        .memories-world {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 2s ease;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .memories-world.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .floating-memory {
+            position: absolute;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation-duration: 20s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+
+        .floating-memory:hover {
+            transform: scale(1.1) !important;
+            z-index: 100;
+            box-shadow: 0 20px 50px rgba(255,255,255,0.1);
+        }
+
+        .floating-memory img,
+        .floating-memory video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .floating-memory.size-small {
+            width: 120px;
+            height: 120px;
+        }
+
+        .floating-memory.size-medium {
+            width: 150px;
+            height: 150px;
+        }
+
+        .floating-memory.size-large {
+            width: 180px;
+            height: 180px;
+        }
+
+        /* Floating animations with more space */
+        @keyframes float1 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(15px, -10px) rotate(1deg); }
+            50% { transform: translate(-8px, -15px) rotate(-1deg); }
+            75% { transform: translate(-12px, 8px) rotate(0.5deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+
+        @keyframes float2 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-12px, 15px) rotate(-0.5deg); }
+            50% { transform: translate(18px, 10px) rotate(1deg); }
+            75% { transform: translate(8px, -12px) rotate(-0.5deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+
+        @keyframes float3 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(10px, 18px) rotate(0.5deg); }
+            50% { transform: translate(-15px, 8px) rotate(-1deg); }
+            75% { transform: translate(-8px, -10px) rotate(0.5deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+
+        .floating-memory.anim-1 { animation-name: float1; }
+        .floating-memory.anim-2 { animation-name: float2; }
+        .floating-memory.anim-3 { animation-name: float3; }
+
+
+
+
+        /* Welcome message overlay */
+        .welcome-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            animation: welcomeAppear 3s ease 2s forwards;
+        }
+
+        .memories-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-white);
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .memories-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--light-grey);
+            font-style: italic;
+        }
+
+        /* Anniversary Message */
+        .anniversary-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .anniversary-message.show {
+            animation: anniversaryFadeIn 4s ease-in-out forwards;
+        }
+
+        .anniversary-text {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            text-shadow: 0 8px 16px rgba(0,0,0,0.8);
+            margin: 0;
+            font-size: 8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            opacity: 0;
+            transform: scale(0.8);
+            white-space: nowrap;
+        }
+
+        .anniversary-text:first-child {
+            animation: wordAppear 2s ease-out 0.5s forwards;
+        }
+
+        .anniversary-text:last-child {
+            animation: wordAppear 2s ease-out 2.5s forwards;
+            font-size: 6rem;
+            margin-top: 30px;
+        }
+
+        @keyframes anniversaryFadeIn {
+            0% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes wordAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        /* Music control */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 3000;
+            opacity: 0;
+        }
+
+        .music-control.visible {
+            opacity: 1;
+        }
+
+        .music-control:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .music-control i {
+            color: var(--primary-white);
+            font-size: 1.5rem;
+        }
+
+        /* Modal/Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            backdrop-filter: blur(20px);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0;
+            width: 95%;
+            max-width: 1200px;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            z-index: 2000;
+            animation: modalFloat 3s ease-in-out infinite;
+        }
+
+        .modal-media-container {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-message-container {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.8);
+            padding: 40px;
+        }
+
+        .modal-message-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .modal img,
+        .modal video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 15px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+            animation: modalSlideIn 0.4s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--primary-white);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            z-index: 2001;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev {
+            left: 30px;
+        }
+
+        .next {
+            right: 30px;
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 15px 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Photo Message System */
+        .photo-message {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 20px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 80%;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--primary-white);
+            line-height: 1.6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            animation: messageSlideIn 0.5s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .message-heart {
+            color: #ff6b6b;
+            margin: 0 5px;
+        }
+
+        /* Animations */
+        @keyframes envelopePulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 
+                    0 30px 60px rgba(0,0,0,0.8),
+                    inset 0 2px 4px rgba(255,255,255,0.1),
+                    inset 0 -2px 4px rgba(0,0,0,0.3);
+            }
+            50% { 
+                transform: scale(1.03); 
+                box-shadow: 
+                    0 35px 70px rgba(0,0,0,0.9),
+                    0 0 30px rgba(255,255,255,0.1),
+                    inset 0 2px 4px rgba(255,255,255,0.15),
+                    inset 0 -2px 4px rgba(0,0,0,0.4);
+            }
+        }
+
+        @keyframes heartFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -60%) scale(1.1); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.2); 
+            }
+        }
+
+        @keyframes welcomeAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes modalFloat {
+            0% { 
+                transform: translate(-50%, -50%) translateY(0px);
+            }
+            50% { 
+                transform: translate(-50%, -50%) translateY(-15px);
+            }
+            100% { 
+                transform: translate(-50%, -50%) translateY(0px);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .envelope {
+                width: 350px;
+                height: 230px;
+            }
+
+            .envelope::before {
+                border-left: 175px solid transparent;
+                border-right: 175px solid transparent;
+                border-top: 115px solid #0a0a0a;
+            }
+
+            .envelope-flap {
+                border-left: 175px solid transparent;
+                border-right: 175px solid transparent;
+                border-top: 115px solid #1a1a1a;
+            }
+
+            .memories-title {
+                font-size: 2.5rem;
+            }
+
+            .memories-subtitle {
+                font-size: 1.2rem;
+            }
+
+
+            .special-photo-1,
+            .special-photo-2 {
+                width: 90%;
+                height: 45%;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .special-photo-1 {
+                top: 3%;
+                left: 5%;
+            }
+
+            .special-photo-2 {
+                bottom: 3%;
+                right: 5%;
+                flex-direction: column;
+            }
+
+            .special-message-text {
+                font-size: 1.8rem;
+            }
+
+            .bisaya-text {
+                font-size: 1.6rem;
+            }
+
+            .english-text {
+                font-size: 1.4rem;
+            }
+
+            .modal-content {
+                flex-direction: column;
+                height: 90vh;
+                width: 98%;
+            }
+            
+            .modal-media-container {
+                flex: 1.2;
+            }
+            
+            .modal-message-container {
+                flex: 0.8;
+                padding: 20px;
+            }
+            
+            .modal-message-text {
+                font-size: 1.8rem;
+            }
+
+            .anniversary-text:first-child {
+                font-size: 5rem;
+            }
+
+            .anniversary-text:last-child {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .envelope {
+                width: 280px;
+                height: 180px;
+            }
+
+            .envelope::before {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-top: 90px solid #0a0a0a;
+            }
+
+            .envelope-flap {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-top: 90px solid #1a1a1a;
+            }
+
+            .anniversary-text:first-child {
+                font-size: 3.5rem;
+            }
+
+            .anniversary-text:last-child {
+                font-size: 2.5rem;
+            }
+        }
+            
+            .modal-content {
+                padding: 20px;
+                width: 98%;
+                transform: translate(-50%, -50%);
+            }
+            
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .prev {
+                left: 15px;
+            }
+            
+            .next {
+                right: 15px;
+            }
+            
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-grey);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--light-grey);
+        }
+    </style>
+</head>
+<body>
+    <!-- Special Photos Screen (First) -->
+    <div class="special-photos-screen" id="specialPhotosScreen">
+        <!-- First Photo - Top, Big Horizontal -->
+        <div class="special-photo-container special-photo-1" id="specialPhoto1">
+            <div class="special-photo">
+                <img src="media/photos/1.jpg" alt="Our Special Moment" loading="eager">
+            </div>
+            <div class="special-message">
+                <div class="special-message-text">
+                    <div class="english-text">You may not be here with me right now</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Photo - Bottom, Big Horizontal -->
+        <div class="special-photo-container special-photo-2" id="specialPhoto2">
+            <div class="special-photo">
+                <img src="media/photos/2.jpg" alt="Our Beautiful Love" loading="eager">
+            </div>
+            <div class="special-message">
+                <div class="special-message-text">
+                    <div class="english-text">But you will always be in my heart wherever I go</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Envelope Screen -->
+    <div class="envelope-screen" id="envelopeScreen">
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-ribbon"></div>
+                <div class="envelope-seal">♥</div>
+                <div class="envelope-heart">♥</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Floating Memories World -->
+    <div class="memories-world" id="memoriesWorld">
+        <div class="welcome-overlay">
+            <div class="memories-title">IF</div>
+            <div class="memories-subtitle">What if I we float through our time, my darling?</div>
+        </div>
+        
+        <!-- Anniversary Message -->
+        <div class="anniversary-message" id="anniversaryMessage">
+            <div class="anniversary-text">21st of September</div>
+            <div class="anniversary-text">The moment we met, my dearest</div>
+        </div>
+    </div>
+
+
+    <!-- Music Control -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="media/music/Bread - If (lyrics).mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Advanced Modal/Lightbox -->
+    <div id="mediaModal" class="modal">
+        
+        <div class="nav-arrow prev" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="nav-arrow next" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="modal-content">
+            <div class="modal-media-container" id="modalMediaContainer">
+                <img id="modalImg" style="display: none;">
+                <video id="modalVideo" controls style="display: none;"></video>
+            </div>
+            <div class="modal-message-container" id="modalMessageContainer">
+                <div class="modal-message-text" id="messageText">Your message will appear here ♥</div>
+            </div>
+        </div>
+        
+        <div class="modal-info" id="modalInfo" style="display: none;">
+            <span id="mediaCounter">1 / 10</span>
+        </div>
+    </div>
+
+    <script>
+        console.log('🚀 New Gallery Loading!');
+        
+        let allMedia = [];
+        let currentMediaIndex = 0;
+        let musicPlaying = false;
+        let backgroundMusic;
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✅ Page loaded successfully!');
+            
+            backgroundMusic = document.getElementById('backgroundMusic');
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            
+            // Start with envelope first
+            // Special photos screen starts hidden
+            document.getElementById('specialPhotosScreen').style.display = 'none';
+            
+            // Envelope click event
+            envelopeContainer.addEventListener('click', () => {
+                console.log('💌 Envelope clicked!');
+                startSpecialPhotosSequence();
+            });
+            
+            // Load media files
+            loadAllMedia();
+            setupModalControls();
+        });
+
+        // Special photos sequence (after envelope click)
+        function startSpecialPhotosSequence() {
+            console.log('💕 Starting special photos sequence...');
+            const specialPhoto1 = document.getElementById('specialPhoto1');
+            const specialPhoto2 = document.getElementById('specialPhoto2');
+            const specialPhotosScreen = document.getElementById('specialPhotosScreen');
+            const envelopeScreen = document.getElementById('envelopeScreen');
+            
+            // Hide envelope and show special photos
+            envelopeScreen.classList.add('hidden');
+            specialPhotosScreen.style.display = 'block';
+            
+            // Show first photo after 0.5 seconds
+            setTimeout(() => {
+                specialPhoto1.classList.add('show');
+                console.log('📸 Showing first special photo: "You may not be here with me right now"');
+            }, 500);
+            
+            // Show second photo after 3 seconds
+            setTimeout(() => {
+                specialPhoto2.classList.add('show');
+                console.log('📸 Showing second special photo: "But you will always be in my heart"');
+            }, 3000);
+            
+            // After photos are shown, start music and transition to floating memories
+            setTimeout(() => {
+                console.log('🎵 Now starting music and transitioning to memories...');
+                
+                // Start music NOW
+                if (backgroundMusic) {
+                    backgroundMusic.play().catch(e => {
+                        console.log('Music autoplay blocked');
+                    });
+                    musicPlaying = true;
+                }
+                
+                // Hide special photos and go directly to floating memories
+                specialPhotosScreen.classList.add('hidden');
+                startMagicalExperience();
+                
+            }, 6000); // Show photos for 6 seconds total
+        }
+
+        // Start the magical experience (directly to floating memories)
+        function startMagicalExperience() {
+            const memoriesWorld = document.getElementById('memoriesWorld');
+            const musicControl = document.getElementById('musicControl');
+            
+            console.log('🎬 Starting floating memories experience...');
+            
+            // Music is already playing from special photos sequence
+            // Show memories world directly
+            memoriesWorld.classList.add('active');
+            musicControl.classList.add('visible');
+            
+            // Start creating floating memories after transition
+            setTimeout(() => {
+                console.log('🎨 Creating floating memories...');
+                createFloatingMemories();
+                
+                // Show anniversary message after IF text appears
+                setTimeout(() => {
+                    console.log('💕 Showing anniversary message...');
+                    const anniversaryMessage = document.getElementById('anniversaryMessage');
+                    anniversaryMessage.classList.add('show');
+                    
+                    // Reset after animation completes
+                    setTimeout(() => {
+                        anniversaryMessage.classList.remove('show');
+                        anniversaryMessage.querySelectorAll('.anniversary-text').forEach(text => {
+                            text.style.opacity = '0';
+                            text.style.transform = 'scale(0.8)';
+                        });
+                    }, 4000);
+                    
+                }, 2000); // Wait 2 seconds after IF appears
+                
+            }, 1000);
+        }
+
+
+        // Load all media files
+        async function loadAllMedia() {
+            console.log('📸 Loading media files...');
+            
+            const actualPhotoFiles = [
+                // Note: 1.jpg and 2.jpg are used in the special intro, not in floating memories
+                '3.jpg',
+                '4.jpg',
+                '5.jpg',
+                '6.jpg',
+                '7.jpg',
+                '8.jpg',
+                '9.jpg',
+                '10.jpg',
+                '11.jpg',
+                '12.jpg',
+                '13.jpg',
+                '14.jpg',
+                '15.jpg',
+                '16.jpg',
+                '17.jpg',
+                '18.jpg',
+                '19.jpg',
+                '20.jpg',
+                '21.jpg',
+                '22.jpg',
+                '23.jpg',
+                '24.jpg',
+                '25.jpg'
+            ];
+
+            // Your actual video files
+            const actualVideoFiles = [
+                'asd.MOV'
+            ];
+
+            // Load photos
+            const photoPromises = actualPhotoFiles.map(filename => {
+                const src = `media/photos/${filename}`;
+                const displayName = filename.replace('.jpg', '');
+                return imageExists(src).then(exists => exists ? { src, name: displayName, type: 'photo' } : null);
+            });
+
+            // Load videos
+            const videoPromises = actualVideoFiles.map(filename => {
+                const src = `media/videos/${filename}`;
+                const displayName = filename.replace('.MOV', '').replace('.mp4', '').replace('.webm', '');
+                return videoExists(src).then(exists => exists ? { src, name: displayName, type: 'video' } : null);
+            });
+
+            const [photoResults, videoResults] = await Promise.all([
+                Promise.all(photoPromises),
+                Promise.all(videoPromises)
+            ]);
+
+            const foundPhotos = photoResults.filter(result => result !== null);
+            const foundVideos = videoResults.filter(result => result !== null);
+            
+            allMedia = [...foundPhotos, ...foundVideos];
+            console.log(`✅ Loaded ${foundPhotos.length} photos and ${foundVideos.length} videos (${allMedia.length} total memories)!`);
+        }
+
+        // Check if image exists
+        function imageExists(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = src;
+                setTimeout(() => resolve(false), 3000);
+            });
+        }
+
+        // Check if video exists
+        function videoExists(src) {
+            return new Promise((resolve) => {
+                const video = document.createElement('video');
+                video.onloadedmetadata = () => resolve(true);
+                video.onerror = () => resolve(false);
+                video.src = src;
+                setTimeout(() => resolve(false), 5000);
+            });
+        }
+
+        // Create floating memories animation with better spacing
+        function createFloatingMemories() {
+            const memoriesWorld = document.getElementById('memoriesWorld');
+            const sizes = ['small', 'medium', 'large'];
+            const animations = ['anim-1', 'anim-2', 'anim-3'];
+
+            allMedia.forEach((media, index) => {
+                setTimeout(() => {
+                    const floatingMemory = document.createElement('div');
+                    floatingMemory.className = `floating-memory ${sizes[index % sizes.length]} ${animations[index % animations.length]}`;
+                    
+                    // Better organized grid layout
+                    const cols = Math.ceil(Math.sqrt(allMedia.length));
+                    const rows = Math.ceil(allMedia.length / cols);
+                    const col = index % cols;
+                    const row = Math.floor(index / cols);
+                    
+                    const sectionWidth = window.innerWidth / cols;
+                    const sectionHeight = window.innerHeight / rows;
+                    
+                    // Add more padding from edges for better separation
+                    const padding = 120;
+                    const x = col * sectionWidth + Math.random() * (sectionWidth - padding * 2) + padding;
+                    const y = row * sectionHeight + Math.random() * (sectionHeight - padding * 2) + padding;
+                    
+                    floatingMemory.style.left = Math.max(0, Math.min(x, window.innerWidth - 200)) + 'px';
+                    floatingMemory.style.top = Math.max(0, Math.min(y, window.innerHeight - 200)) + 'px';
+
+                    // Create media element
+                    if (media.type === 'photo') {
+                        floatingMemory.innerHTML = `<img src="${media.src}" alt="${media.name}" loading="lazy">`;
+                    } else {
+                        floatingMemory.innerHTML = `<video src="${media.src}" muted preload="metadata"></video>`;
+                    }
+
+                    // Add click handler
+                    floatingMemory.addEventListener('click', () => {
+                        openModal(index);
+                    });
+
+                    memoriesWorld.appendChild(floatingMemory);
+                }, index * 200); // Stagger the appearance
+            });
+
+            // After photos are organized, add periodic position transitions
+            setTimeout(() => {
+                console.log('🎨 Adding periodic position transitions...');
+                const floatingMemories = document.querySelectorAll('.floating-memory');
+                
+                // Function to transition photos to new organized positions
+                const transitionToNewPositions = () => {
+                    console.log('🔄 Transitioning to new positions...');
+                    
+                    floatingMemories.forEach((memory, index) => {
+                        // Calculate new organized position
+                        const cols = Math.ceil(Math.sqrt(allMedia.length));
+                        const rows = Math.ceil(allMedia.length / cols);
+                        const col = index % cols;
+                        const row = Math.floor(index / cols);
+                        
+                        const sectionWidth = window.innerWidth / cols;
+                        const sectionHeight = window.innerHeight / rows;
+                        
+                        // Add more padding from edges for better separation
+                        const padding = 120;
+                        const newX = col * sectionWidth + Math.random() * (sectionWidth - padding * 2) + padding;
+                        const newY = row * sectionHeight + Math.random() * (sectionHeight - padding * 2) + padding;
+                        
+                        // Smooth transition to new position
+                        memory.style.transition = 'all 2s ease-in-out';
+                        memory.style.left = Math.max(0, Math.min(newX, window.innerWidth - 200)) + 'px';
+                        memory.style.top = Math.max(0, Math.min(newY, window.innerHeight - 200)) + 'px';
+                        
+                        // Add slight rotation variation
+                        const randomRotation = (Math.random() - 0.5) * 10; // -5 to +5 degrees
+                        memory.style.transform = `rotate(${randomRotation}deg)`;
+                    });
+                };
+                
+                // Transition every 8 seconds
+                setInterval(transitionToNewPositions, 8000);
+                
+                // First transition after 3 seconds
+                setTimeout(transitionToNewPositions, 3000);
+                
+            }, allMedia.length * 200 + 2000); // Wait for all photos to appear + 2 seconds
+
+        }
+
+        // Messages for each photo/video - personalized messages for each memory
+        const photoMessages = [
+            "I really like how happy you are here, love",
+            "Look how cute this is :<",
+            "This is our first boat trip TT",
+            "Aww, I remember this one",
+            "Look, this is my fav cafe",
+            "They say it's a curse to take photos in a photobooth, but if this is a curse, then I never want to be free from it, my love",
+            "Our Bohol Trip yippee",
+            "Awwe kiss kiss",
+            "Our Siquijor trip, lannga :<",
+            "I love your smile here",
+            "Mirror Shottt",
+            "Mirror Shot Again",
+            "I like it when we cuddle",
+            "The moment I will never forget",
+            "Look how gorgeous you are, pookie",
+            "I think you're drunk here but you really are so cute and beautiful, my love",
+            "Oh my darling, You're killing me with that smile",
+            "Look at this, it looks like our own house where we took a family picture",
+            "Oh lover, look at your smile again",
+            "Sweet snapshot",
+            "I really really love this photo",
+            "Oh baby our Cebu Tripp",
+            "You are my everything"
+        ];
+
+        // Modal functionality
+        const modal = document.getElementById('mediaModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalVideo = document.getElementById('modalVideo');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const modalInfo = document.getElementById('modalInfo');
+        const mediaCounter = document.getElementById('mediaCounter');
+        const photoMessage = document.getElementById('photoMessage');
+        const messageText = document.getElementById('messageText');
+
+        function setupModalControls() {
+            prevBtn.onclick = () => {
+                if (allMedia.length > 1) {
+                    currentMediaIndex = (currentMediaIndex - 1 + allMedia.length) % allMedia.length;
+                    showCurrentMedia();
+                }
+            };
+            nextBtn.onclick = () => {
+                if (allMedia.length > 1) {
+                    currentMediaIndex = (currentMediaIndex + 1) % allMedia.length;
+                    showCurrentMedia();
+                }
+            };
+            modal.onclick = (e) => {
+                // Close modal when clicking anywhere on the modal background
+                if (e.target === modal || e.target.classList.contains('modal-message-container')) {
+                    closeModal();
+                }
+            };
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    closeModal();
+                }
+            });
+        }
+
+        function openModal(index) {
+            currentMediaIndex = index;
+            showCurrentMedia();
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            updateModalInfo();
+            showPhotoMessage();
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            modalVideo.pause();
+            document.body.style.overflow = 'auto';
+        }
+
+        function showCurrentMedia() {
+            const media = allMedia[currentMediaIndex];
+            if (!media) return;
+            
+            modalImg.style.display = 'none';
+            modalVideo.style.display = 'none';
+            
+            // Determine layout based on index (alternating sides)
+            const isEven = currentMediaIndex % 2 === 0;
+            const mediaContainer = document.getElementById('modalMediaContainer');
+            const messageContainer = document.getElementById('modalMessageContainer');
+            
+            if (isEven) {
+                // Even index: photo on left, message on right
+                mediaContainer.style.order = '1';
+                messageContainer.style.order = '2';
+            } else {
+                // Odd index: message on left, photo on right
+                mediaContainer.style.order = '2';
+                messageContainer.style.order = '1';
+            }
+            
+            if (media.type === 'photo') {
+                modalImg.src = media.src;
+                modalImg.style.display = 'block';
+                modalVideo.pause();
+            } else {
+                modalVideo.src = media.src;
+                modalVideo.style.display = 'block';
+            }
+            
+            updateModalInfo();
+            showPhotoMessage();
+        }
+
+        function updateModalInfo() {
+            if (allMedia.length > 1) {
+                mediaCounter.textContent = `${currentMediaIndex + 1} / ${allMedia.length}`;
+                modalInfo.style.display = 'block';
+            } else {
+                modalInfo.style.display = 'none';
+            }
+        }
+
+        function showPhotoMessage() {
+            // Show message for each photo
+            const message = photoMessages[currentMediaIndex] || "This moment with you is precious to me";
+            messageText.innerHTML = message;
+            
+            // Reset opacity when showing
+            messageText.style.opacity = '1';
+        }
+
+        // Music controls
+        document.getElementById('musicControl').addEventListener('click', () => {
+            const musicControl = document.getElementById('musicControl');
+            const icon = musicControl.querySelector('i');
+            
+            if (musicPlaying && backgroundMusic) {
+                backgroundMusic.pause();
+                icon.className = 'fas fa-music';
+                musicPlaying = false;
+            } else if (backgroundMusic) {
+                backgroundMusic.play().catch(e => console.log('Music play failed'));
+                icon.className = 'fas fa-pause';
+                musicPlaying = true;
+            }
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display === 'block') {
+                switch(e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        prevBtn.click();
+                        break;
+                    case 'ArrowRight':
+                        nextBtn.click();
+                        break;
+                    case 'f':
+                    case 'F':
+                        fullscreenBtn.click();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        if (modalVideo.style.display !== 'none') {
+                            modalVideo.paused ? modalVideo.play() : modalVideo.pause();
+                        }
+                        break;
+                }
+            }
+        });
+
+        console.log('🎉 Gallery ready! Click the magic button to begin!');
+    </script>
+</body>
+</html>
